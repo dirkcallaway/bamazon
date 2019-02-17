@@ -24,16 +24,62 @@ var displayProducts = function () {
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
     var table = new Table({
-      head:["ID", "Product", "Department", "Price"],
-      colWidths: [5,30,30,8]
+      head: ["ID", "Product", "Department", "Price"],
+      colWidths: [5, 30, 30, 8]
     });
     for (var i = 0; i < res.length; i++) {
       table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price]);
-      // console.log(res[i].id + " | " + res[i].artist + " | " + res[i].title + " | " + res[i].year);
     }
     console.log(table.toString());
+    console.log("------------------------------------------------------".green);
+    ask();
   });
-  connection.end();
+  // connection.end();
+};
+
+var ask = function () {
+
+  inquirer.prompt([
+
+    {
+      type: "input",
+      name: "item",
+      message: "What would you like to buy?  Select by Item #",
+    },
+    {
+      type: "input",
+      name: "quantity",
+      message: "How many would you like?",
+    }
+
+  ]).then(function (bamazon) {
+    var endingString = "";
+    if (bamazon.quantity > 1) {
+      endingString = "s.";
+    } else {
+      endingString = ".";
+    }
+    console.log("\n-------------------------------------\n\n".green);
+    console.log("You just purchased " + bamazon.quantity + " " + bamazon.item + endingString);
+    console.log("\n\n-----------------------------------".green);
+    //adjust in mySQL
+    inquirer.prompt([
+      {
+        type: "list",
+        name: "done",
+        message: "Did you want to buy anything else?",
+        choices: ["Yes", "No"]
+      }
+    ]).then(function(done){
+      console.log(done.done);
+      if(done.done === "Yes"){
+        displayProducts();
+      } else {
+        console.log("\n\nThanks for shopping at Bamazon!  Have a nice day!\n\n".magenta);
+        connection.end();
+      }
+    });
+  });
 };
 
 displayProducts();
