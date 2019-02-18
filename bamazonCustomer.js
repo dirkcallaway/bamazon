@@ -4,6 +4,9 @@ var mysql = require("mysql");
 var colors = require("colors");
 var Table = require("cli-table");
 
+//Variable
+var product_id;
+
 //mySQL connection info
 var connection = mysql.createConnection({
   host: "localhost",
@@ -15,12 +18,12 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "password",
+  password: "BeckettEv1&Min@",
   database: "bamazon"
 });
 
 //display table function
-var displayProducts = function () {
+var displayProducts = function (callback) {
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
     var table = new Table({
@@ -32,9 +35,36 @@ var displayProducts = function () {
     }
     console.log(table.toString());
     console.log("------------------------------------------------------".green);
-    ask();
+    callback();
   });
   // connection.end();
+};
+
+var finishedShopping = function(){
+  inquirer.prompt([
+    {
+      type: "list",
+      name: "done",
+      message: "Did you want to buy anything else?",
+      choices: ["Yes", "No"]
+    }
+  ]).then(function(done){
+    console.log(done.done);
+    if(done.done === "Yes"){
+      displayProducts(ask);
+    } else {
+      console.log("\n\nThanks for shopping at Bamazon!  Have a nice day!\n\n".magenta);
+      connection.end();
+    }
+  });
+};
+
+var adjustProducts = function(quantity, purchased){
+  let remainingInventory = quantity - purchased;
+  connection.query("UPDATE products SET stock_quantity = ? WHERE ?",[remainingInventory, {item_id: product_id}], function (err, res) {
+    if (err) throw err;
+    displayProducts(finishedShopping);
+  });
 };
 
 var ask = function () {
@@ -54,32 +84,24 @@ var ask = function () {
 
   ]).then(function (bamazon) {
     var endingString = "";
+    product_id = bamazon.item;
     if (bamazon.quantity > 1) {
       endingString = "s.";
     } else {
       endingString = ".";
-    }
-    console.log("\n-------------------------------------\n\n".green);
-    console.log("You just purchased " + bamazon.quantity + " " + bamazon.item + endingString);
-    console.log("\n\n-----------------------------------".green);
-    //adjust in mySQL
-    inquirer.prompt([
-      {
-        type: "list",
-        name: "done",
-        message: "Did you want to buy anything else?",
-        choices: ["Yes", "No"]
-      }
-    ]).then(function(done){
-      console.log(done.done);
-      if(done.done === "Yes"){
-        displayProducts();
-      } else {
-        console.log("\n\nThanks for shopping at Bamazon!  Have a nice day!\n\n".magenta);
-        connection.end();
-      }
+    };
+    connection.query("SELECT product_name, stock_quantity FROM products WHERE ?",{item_id: bamazon.item}, function (err, res) {
+      if (err) throw err;
+      console.log("\n-------------------------------------\n\n".green);
+      console.log("You just purchased " + bamazon.quantity + " " + res[0].product_name + endingString);
+      console.log("\n\n-----------------------------------".green);
+      console.log(res[0].stock_quantity);
+      console.log(bamazon.quantity);
+      adjustProducts(res[0].stock_quantity, bamazon.quantity);
     });
+
+    //adjust in mySQL
   });
 };
 
-displayProducts();
+displayProducts(ask);
