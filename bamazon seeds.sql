@@ -20,3 +20,13 @@ INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES("Tulips", "Floral", 22, 10);
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES("iPod", "Electronics", 85, 3);
+INSERT INTO departments (department_name, over_head_costs)
+VALUES("Electronics", 450);
+INSERT INTO departments (department_name, over_head_costs)
+VALUES("Floral", 300);
+INSERT INTO departments (department_name, over_head_costs)
+VALUES("Bath/Body", 200);
+INSERT INTO departments (department_name, over_head_costs)
+VALUES("Office", 50);
+INSERT INTO departments (department_name, over_head_costs)
+VALUES("Automotive", 150);

@@ -11,3 +11,10 @@ price INTEGER(5) NOT NULL,
 stock_quantity INTEGER(11) NOT NULL,
 PRIMARY KEY(item_id)
 );
+
+CREATE TABLE departments(
+department_id INTEGER NOT NULL AUTO_INCREMENT,
+department_name VARCHAR(100) NOT NULL,
+over_head_costs INTEGER(5) NOT NULL,
+PRIMARY KEY(department_id)
+);

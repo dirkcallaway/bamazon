@@ -58,10 +58,11 @@ var finishedShopping = function () {
   });
 };
 
-var adjustProducts = function (quantity, purchased) {
+var adjustProducts = function (quantity, purchased, price) {
+  let total_cost = parseFloat(purchased) * parseFloat(price);
   let remainingInventory = quantity - purchased;
   if (remainingInventory < 0) {
-    console.log("We currently do not have enough in stock.")
+    console.log("We currently do not have enough in stock.\n")
     finishedShopping();
   } else {
     connection.query("UPDATE products SET stock_quantity = ? WHERE ?", [remainingInventory, {
@@ -70,6 +71,7 @@ var adjustProducts = function (quantity, purchased) {
       if (err) throw err;
       console.log("\n-------------------------------------\n\n".green);
       console.log("You just purchased " + purchased + " " + productName + "(s)");
+      console.log("The total cost is $" + total_cost);
       console.log("\n\n-----------------------------------".green);
       finishedShopping();
     });
@@ -92,19 +94,18 @@ var ask = function () {
     }
 
   ]).then(function (bamazon) {
-    var endingString = "";
     product_id = bamazon.item;
     if (bamazon.quantity > 1) {
       endingString = "s.";
     } else {
       endingString = ".";
     };
-    connection.query("SELECT product_name, stock_quantity FROM products WHERE ?", {
+    connection.query("SELECT product_name, stock_quantity, price FROM products WHERE ?", {
       item_id: bamazon.item
     }, function (err, res) {
       if (err) throw err;
       productName = res[0].product_name;
-      adjustProducts(res[0].stock_quantity, bamazon.quantity);
+      adjustProducts(res[0].stock_quantity, bamazon.quantity, res[0].price);
     });
   });
 };
