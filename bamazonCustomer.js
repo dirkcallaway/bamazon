@@ -6,6 +6,7 @@ var Table = require("cli-table");
 
 //Variable
 var product_id;
+var productName;
 
 //mySQL connection info
 var connection = mysql.createConnection({
@@ -18,7 +19,7 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "Password",
+  password: "BeckettEv1&Min@",
   database: "bamazon"
 });
 
@@ -40,17 +41,15 @@ var displayProducts = function (callback) {
   // connection.end();
 };
 
-var finishedShopping = function(){
-  inquirer.prompt([
-    {
-      type: "list",
-      name: "done",
-      message: "Did you want to buy anything else?",
-      choices: ["Yes", "No"]
-    }
-  ]).then(function(done){
+var finishedShopping = function () {
+  inquirer.prompt([{
+    type: "list",
+    name: "done",
+    message: "Did you want to buy anything else?",
+    choices: ["Yes", "No"]
+  }]).then(function (done) {
     console.log(done.done);
-    if(done.done === "Yes"){
+    if (done.done === "Yes") {
       displayProducts(ask);
     } else {
       console.log("\n\nThanks for shopping at Bamazon!  Have a nice day!\n\n".magenta);
@@ -59,12 +58,22 @@ var finishedShopping = function(){
   });
 };
 
-var adjustProducts = function(quantity, purchased){
+var adjustProducts = function (quantity, purchased) {
   let remainingInventory = quantity - purchased;
-  connection.query("UPDATE products SET stock_quantity = ? WHERE ?",[remainingInventory, {item_id: product_id}], function (err, res) {
-    if (err) throw err;
-    displayProducts(finishedShopping);
-  });
+  if (remainingInventory < 0) {
+    console.log("We currently do not have enough in stock.")
+    finishedShopping();
+  } else {
+    connection.query("UPDATE products SET stock_quantity = ? WHERE ?", [remainingInventory, {
+      item_id: product_id
+    }], function (err, res) {
+      if (err) throw err;
+      console.log("\n-------------------------------------\n\n".green);
+      console.log("You just purchased " + purchased + " " + productName + "(s)");
+      console.log("\n\n-----------------------------------".green);
+      finishedShopping();
+    });
+  }
 };
 
 var ask = function () {
@@ -90,17 +99,13 @@ var ask = function () {
     } else {
       endingString = ".";
     };
-    connection.query("SELECT product_name, stock_quantity FROM products WHERE ?",{item_id: bamazon.item}, function (err, res) {
+    connection.query("SELECT product_name, stock_quantity FROM products WHERE ?", {
+      item_id: bamazon.item
+    }, function (err, res) {
       if (err) throw err;
-      console.log("\n-------------------------------------\n\n".green);
-      console.log("You just purchased " + bamazon.quantity + " " + res[0].product_name + endingString);
-      console.log("\n\n-----------------------------------".green);
-      console.log(res[0].stock_quantity);
-      console.log(bamazon.quantity);
+      productName = res[0].product_name;
       adjustProducts(res[0].stock_quantity, bamazon.quantity);
     });
-
-    //adjust in mySQL
   });
 };
 

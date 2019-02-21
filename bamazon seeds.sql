@@ -18,3 +18,5 @@ INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES("Toothpaste", "Bath/Body", 9, 142);
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES("Tulips", "Floral", 22, 10);
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUES("iPod", "Electronics", 85, 3);
