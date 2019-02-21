@@ -65,7 +65,7 @@ var adjustProducts = function (quantity, purchased, price) {
     console.log("We currently do not have enough in stock.\n")
     finishedShopping();
   } else {
-    connection.query("UPDATE products SET stock_quantity = ? WHERE ?", [remainingInventory, {
+    connection.query("UPDATE products SET stock_quantity = ?, product_sales = ? WHERE ?", [remainingInventory, total_cost, {
       item_id: product_id
     }], function (err, res) {
       if (err) throw err;

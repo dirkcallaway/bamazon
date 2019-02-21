@@ -142,7 +142,7 @@ var ask = function () {
     {
       type: "list",
       name: "command",
-      message: "What would you like to buy?  Select by Item #",
+      message: "What would you like to do?",
       choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "Finished"]
     }
 
