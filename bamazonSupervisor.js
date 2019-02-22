@@ -3,6 +3,7 @@ var inquirer = require("inquirer");
 var mysql = require("mysql");
 var colors = require("colors");
 var Table = require("cli-table");
+require("dotenv").config();
 
 //mySQL connection info
 var connection = mysql.createConnection({
