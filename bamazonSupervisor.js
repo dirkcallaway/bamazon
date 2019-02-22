@@ -7,17 +7,17 @@ require("dotenv").config();
 
 //mySQL connection info
 var connection = mysql.createConnection({
-  host: "localhost",
+  host: process.env.DB_host,
 
   // Your port; if not 3306
   port: 3306,
 
   // Your username
-  user: "root",
+  user: process.env.DB_USER,
 
   // Your password
-  password: "BeckettEv1&Min@",
-  database: "bamazon"
+  password: process.env.DB_PASS,
+  database: process.env.DB
 });
 
 var finished = function () {
