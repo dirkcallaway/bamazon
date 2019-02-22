@@ -26,20 +26,42 @@ var finished = function () {
 };
 
 var sales_by_department = function () {
-  connection.query("SELECT departments.department_id, departments.department_name, departments.over_head_costs, SUM(products.product_sales) AS product_sales FROM departments INNER JOIN products ON departments.department_name=products.department_name GROUP BY departments.department_id ORDER BY departments.department_id", function (err, res) {
+  connection.query("SELECT departments.department_id, departments.department_name, departments.over_head_costs, SUM(products.product_sales) AS product_sales FROM departments LEFT JOIN products ON departments.department_name=products.department_name GROUP BY departments.department_id ORDER BY departments.department_id", function (err, res) {
     var salesTable = new Table({
       head: ["Deparment ID", "Department Name", "Overhead Cost", "Product Sales", "Total Profit"],
       colWidths: [15, 24, 24, 24, 15]
     });
     for (var i = 0; i < res.length; i++) {
-        var total_sales = parseFloat(res[i].product_sales) - parseFloat(res[i].over_head_costs);
-        salesTable.push([res[i].department_id, res[i].department_name, res[i].over_head_costs, res[i].product_sales, total_sales]);
+      let productSales = res[i].product_sales === null ? 0 : res[i].product_sales;
+      var total_sales = parseFloat(productSales) - parseFloat(res[i].over_head_costs);
+      salesTable.push([res[i].department_id, res[i].department_name, res[i].over_head_costs, productSales, total_sales]);
     };
     console.log(salesTable.toString());
     console.log("------------------------------------------------------".green);
     ask();
   });
-}
+};
+
+var create_new_department = function () {
+  inquirer.prompt([{
+      type: "input",
+      name: "name",
+      message: "What department would you like to add?",
+    },
+    {
+      type: "input",
+      name: "overhead",
+      message: "What's the department's overhead cost?",
+    },
+
+  ]).then(function (department) {
+    connection.query("INSERT INTO departments (department_name, over_head_costs) VALUES(?, ?);", [department.name, department.overhead], function (err, res) {
+      console.log("\n\nAdded department " + department.name + " with overhead of " + department.overhead + "\n\n");
+      console.log("------------------------------------------------------".green);
+      ask();
+    });
+  });
+};
 
 var ask = function () {
 
@@ -59,7 +81,7 @@ var ask = function () {
         break;
 
       case "Create New Department":
-
+        create_new_department();
         break;
 
       case "Finished":
