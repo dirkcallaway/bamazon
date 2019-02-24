@@ -1,13 +1,13 @@
-# bamazon
+# Bamazon - A Node/mySQL Shopping Platform
 
-##Introduction
+## Introduction
 Bamazon is a store front built on Node.js and mySQL.  The purpose was to use Node to simulate a customer, manager, and supervisor portal into an online shopping experience.  The customer could buy things from the store and the records would be updated in the mySQL database.  The manager could monitor sames and reorder stock.  The supervisor could create new departments and monitor departments for total profits.
 
-##Customer Portal
+## Customer Portal
 The customer portal displayed items for sale and their price.  It would calculate the total cost of the items purchased and delete the stock from the mySQL database.  Video demonstration can be seen here:
 https://drive.google.com/file/d/12pyIP639Ml6cYOYDFoJk10iaHvDJUtyE/view
 
-##Manager Portal
+## Manager Portal
 The manager portal allowed a manager to see what items were currently for sale, displaying the item, department, cost and quantity.  It also allowed the manager to narrow the items down to just those that were low in stock ( < 5 ) to see what needed to be reordered.  The manager could then reorder more stock of an item.  Lastly, a manager could add a new product to a current department.  Video demonstration can be seen here:
 https://drive.google.com/file/d/15uQRSLNxS9L0c1EFKdI_po13RQ8oLA3P/view
 
