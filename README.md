@@ -11,6 +11,6 @@ https://drive.google.com/file/d/12pyIP639Ml6cYOYDFoJk10iaHvDJUtyE/view
 The manager portal allowed a manager to see what items were currently for sale, displaying the item, department, cost and quantity.  It also allowed the manager to narrow the items down to just those that were low in stock ( < 5 ) to see what needed to be reordered.  The manager could then reorder more stock of an item.  Lastly, a manager could add a new product to a current department.  Video demonstration can be seen here:
 https://drive.google.com/file/d/15uQRSLNxS9L0c1EFKdI_po13RQ8oLA3P/view
 
-## Bamazon Supervisor
+## Supervisor Portal
 The supervisor portal had to functionalities.  The first was to view product sale by department.  This allows the supervisor to see how each department is doing based on their sales and the overhead cost of each department.  This utilizes a mySQL join between the products table and the departments table.  The second functionality was to create a new department.  Once a new department is created, a manager could then add products to it so customers would be able to purchase them.  A video demonstration can be seen here:
 https://drive.google.com/file/d/1s68fcsInayeJ1fRWhP3cGRE64wQvbLf_/view
