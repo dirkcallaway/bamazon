@@ -12,5 +12,5 @@ The manager portal allowed a manager to see what items were currently for sale, 
 https://drive.google.com/file/d/15uQRSLNxS9L0c1EFKdI_po13RQ8oLA3P/view
 
 ## Supervisor Portal
-The supervisor portal had to functionalities.  The first was to view product sale by department.  This allows the supervisor to see how each department is doing based on their sales and the overhead cost of each department.  This utilizes a mySQL join between the products table and the departments table.  The second functionality was to create a new department.  Once a new department is created, a manager could then add products to it so customers would be able to purchase them.  A video demonstration can be seen here:
+The supervisor portal had two functionalities.  The first was to view product sale by department.  This allows the supervisor to see how each department is doing based on their sales and the overhead cost of each department.  This utilizes a mySQL join between the products table and the departments table.  The second functionality was to create a new department.  Once a new department is created, a manager could then add products to it so customers would be able to purchase them.  A video demonstration can be seen here:
 https://drive.google.com/file/d/1s68fcsInayeJ1fRWhP3cGRE64wQvbLf_/view
